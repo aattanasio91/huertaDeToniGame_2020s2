@@ -7,6 +7,20 @@ program huertaDeToni {
 	game.width(15)
 	game.height(15)
 	
+	//Configuracion de teclado
+	
+	keyboard.up().onPressDo{toni.moverArriba()}
+	keyboard.down().onPressDo{toni.moverAbajo()}
+	keyboard.left().onPressDo{toni.moverIzq()}
+	keyboard.right().onPressDo{toni.moverDer()}
+	keyboard.m().onPressDo{
+		var maiz = new Maiz(valor = value, aptoCeliaco = value)
+		toni.sembrar()
+	}
+	keyboard.t().onPressDo{}
+	keyboard.o().onPressDo{}
+	
+	
 	// Configuramos una imagen de fondo, que se repite para cada celda del tablero.
 	game.ground("tierra.png")
 	
