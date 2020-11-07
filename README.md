@@ -195,5 +195,5 @@ Agregar las siguientes validaciones:
 
 1. Al sembrar, arrojar error si ya había otra planta en la celda actual.
 1. Al cosechar, arrojar error si la planta de la celda actual no está lista.
-1. Al cosechar, arrojar error si no hay ninguna planta en la celda actual
+1. Al cosechar, arrojar error si no hay ninguna planta en la celda actual.
 
