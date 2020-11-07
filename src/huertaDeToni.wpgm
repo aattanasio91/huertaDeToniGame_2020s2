@@ -13,12 +13,13 @@ program huertaDeToni {
 	keyboard.down().onPressDo{toni.moverAbajo()}
 	keyboard.left().onPressDo{toni.moverIzq()}
 	keyboard.right().onPressDo{toni.moverDer()}
-	keyboard.m().onPressDo{
-		var maiz = new Maiz(valor = value, aptoCeliaco = value)
-		toni.sembrar()
-	}
-	keyboard.t().onPressDo{}
-	keyboard.o().onPressDo{}
+	keyboard.m().onPressDo{toni.sembrar(new Maiz(position = toni.position()))}
+	keyboard.t().onPressDo{toni.sembrar(new Trigo(position = toni.position()))}
+	keyboard.o().onPressDo{toni.sembrar(new Tomaco(position = toni.position()))}
+	keyboard.r().onPressDo{toni.regarPlanta()}
+	keyboard.a().onPressDo{toni.regarLasPlantas()}
+	keyboard.x().onPressDo{toni.cosecharTodo()}
+	keyboard.c().onPressDo{toni.cosechar()}
 	
 	
 	// Configuramos una imagen de fondo, que se repite para cada celda del tablero.
@@ -43,7 +44,7 @@ program huertaDeToni {
 	 * De yapa, mostramos cómo agregar varios objetos de una utilizando
 	 * un rango (1..13), que equivale a la lista [1, 2, 3, ..., 13].
 	 */
-	(1..13).forEach { x => game.addVisualIn(new Maiz(), game.at(x, 5)) }
+//	(1..13).forEach { x => game.addVisualIn(new Maiz(position = value), game.at(x, 5)) }
 		
 	game.start()
 }

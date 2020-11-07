@@ -1,11 +1,13 @@
 class Planta {
-	const property valor
-	const property aptoCeliaco
+	var property position
 	
 	method regar()
 	
 	method estaListaParaCosechar()
 	
+	method aptoCeliaco() = false
+	
+	method valor() = 0
 }
 
 class Maiz inherits Planta{
@@ -25,12 +27,12 @@ class Maiz inherits Planta{
 		return self.esAdulta()
 	}
 	
-	override method aptoCeliaco() {return true}
+	override method aptoCeliaco() = true
 }
 
 class Trigo inherits Planta{
 	const property nombreImagen = ["trigo_0.png", "trigo_1.png", "trigo_2.png", "trigo_3.png"]
-	var property estadoEvolucion
+	var property estadoEvolucion = 0
 	var property image = "trigo_0.png"
 	
 	method image() {
@@ -38,7 +40,9 @@ class Trigo inherits Planta{
 	}
 	
 	override method regar(){
-		estadoEvolucion++
+		if(estadoEvolucion % 4 != 3){
+			estadoEvolucion++
+		}
 	}
 	
 	override method estaListaParaCosechar(){
@@ -56,7 +60,6 @@ class Trigo inherits Planta{
 		return valor
 	}
 	
-	override method aptoCeliaco() {return false}
 }
 
 class Tomaco inherits Planta{
@@ -72,5 +75,5 @@ class Tomaco inherits Planta{
 		return 80
 	}
 	
-	override method aptoCeliaco() {return true} 
+	override method aptoCeliaco() = true
 }

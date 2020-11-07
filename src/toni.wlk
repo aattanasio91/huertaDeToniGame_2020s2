@@ -5,7 +5,8 @@ object toni {
 	const property image = "toni.png"
 	var property position = game.at(3, 3)
 	var property plantasSembradas = []
-	var property plantasCosechadas = [] 
+	var property plantasCosechadas = []
+	var property posicionesDePlantas = [] 
 	var property oro = 0
 	
 	method moverArriba(){
@@ -25,25 +26,42 @@ object toni {
 	}
 	
 	method sembrar(unaPlanta){
-		plantasSembradas.add(unaPlanta)
+		if(!posicionesDePlantas.contains(self.position())){
+			plantasSembradas.add(unaPlanta)
+			posicionesDePlantas.add(self.position())
+			game.addVisualIn(unaPlanta, self.position())
+		}else{
+			self.error("Ya existe una planta en esta posicion")
+		}
 	}
 	
 	method regarLasPlantas(){
 		plantasSembradas.forEach({planta => planta.regar()})
 	}
 	
+	method regarPlanta(){
+		game.colliders(self).forEach({planta => planta.regar()})
+	}
+	
 	method plantasListasParaCosechar(){
-		return plantasSembradas.map({planta => planta.estaListaParaCosechar()})
+		return plantasSembradas.filter({planta => planta.estaListaParaCosechar()})
 	}
 	
 	method cosecharTodo(){
-		self.plantasListasParaCosechar().forEach({planta => self.cosechar(planta)})
+		
+		self.plantasListasParaCosechar().forEach({planta => 
+			self.position(planta.position())
+			self.cosechar()
+		})
 	}
 	
-	method cosechar(unaPlanta){
-		if(self.plantasSembradas().contains(unaPlanta)){
-			self.plantasSembradas().remove(unaPlanta)
-			self.plantasCosechadas().add(unaPlanta)
+	method cosechar(){
+		const planta = game.uniqueCollider(self)
+		if(planta.estaListaParaCosechar()){
+			plantasSembradas.add(planta)
+			game.removeVisual(planta)
+			plantasSembradas.remove(planta)
+			posicionesDePlantas.remove(self.position())
 		}
 		else{
 			self.error("La planta no se encuentra sembrada")
@@ -70,7 +88,7 @@ object toni {
 	}
 	
 	method cuantoHayParaCeliacos(){
-		return self.plantasSembradas().count({planta => planta.aptaCeliaco()})
+		return self.plantasSembradas().count({planta => planta.aptoCeliaco()})
 	}
 	
 	method convieneRegar(){
