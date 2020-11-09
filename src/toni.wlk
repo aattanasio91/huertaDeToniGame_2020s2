@@ -126,4 +126,13 @@ object toni {
 	method convieneRegar(){
 		return self.plantasSembradas().any({planta => !planta.estaListaParaCosechar()})
 	}
+
+method hacerOfrenda(pachamama) { 
+		pachamama.rotarPosicion()
+		if (plantasSembradas != []) { plantasSembradas.anyOne().serOfrenda() }		
+		if (not pachamama.estaAgradecida()) { pachamama.nivelAgradecimiento(10) }	
+		else {pachamama.llover() self.regarLasPlantas()}					
+	}
+
 }
+
