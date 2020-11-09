@@ -1,3 +1,9 @@
+import wollok.game.*
+import toni.*
+import pachamama.*
+import mercado.*
+import configuraciones.*
+
 class Planta {
 	var property position
 	
@@ -8,18 +14,25 @@ class Planta {
 	method aptoCeliaco() = false
 	
 	method valor() = 0
+
+		method serOfrenda() {
+		game.removeVisual(self) 
+		toni.plantasSembradas().remove(self)
+	}
 }
 
 class Maiz inherits Planta{
 	var property esAdulta = false
-	var property image = "maiz_bebe.png"
+//	var property image = "maiz_bebe.png"
 	
-	override method valor(){
-		return 150
-	}
+	override method valor(){ 
+		if(pachamama.estaAgradecida()){
+			return 180
+		}
+		else {return 150}	}
 	
 	override method regar(){
-		self.image("maiz_adulto.png")
+//		self.image("maiz_adulto.png")
 		self.esAdulta(true)
 	}
 	
@@ -28,21 +41,31 @@ class Maiz inherits Planta{
 	}
 	
 	override method aptoCeliaco() = true
+
+	method image() {
+		return if (esAdulta and pachamama.estaAgradecida()) { "maiz-gigante.jpg" } 
+		else if (esAdulta) { "maiz_adulto.png" }
+		else { "maiz_bebe.png" }
+			
+	}
 }
 
 class Trigo inherits Planta{
-	const property nombreImagen = ["trigo_0.png", "trigo_1.png", "trigo_2.png", "trigo_3.png"]
+//	const property nombreImagen = ["trigo_0.png", "trigo_1.png", "trigo_2.png", "trigo_3.png"]
 	var property estadoEvolucion = 0
-	var property image = "trigo_0.png"
-	
+//	var property image = "trigo_0.png"
 	method image() {
-		 return nombreImagen.get(self.estadoEvolucion() % 4)
+	
+	if (estadoEvolucion == 0) { return "trigo_0.png" }
+	else if (estadoEvolucion == 1) { return "trigo_1.png"  }
+	else if (estadoEvolucion == 2) { return "trigo_2.png"  }
+	else { return "trigo_3.png"  }
+	
 	}
 	
 	override method regar(){
-		if(estadoEvolucion % 4 != 3){
-			estadoEvolucion++
-		}
+		if (pachamama.estaAgradecida()) { estadoEvolucion = (estadoEvolucion + 2).min(4) }
+		else { estadoEvolucion = (estadoEvolucion + 1).min(4) }
 	}
 	
 	override method estaListaParaCosechar(){
@@ -76,4 +99,11 @@ class Tomaco inherits Planta{
 	}
 	
 	override method aptoCeliaco() = true
+
+
+	
+	method image() { 
+		return if (pachamama.estaAgradecida()) { "tomaco_podrido.png" }
+		else { "tomaco_ok.png" }			
+	}
 }

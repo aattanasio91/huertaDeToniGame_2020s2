@@ -26,7 +26,11 @@ object juego {
 			game.say(toni,"Tengo " + toni.oro().toString() + " monedas de oro " + 
 			" y quedan " + toni.plantasCosechadas().size().toString() + " plantas por vender")
 		}
+		keyboard.f().onPressDo({ pachamama.fumigar() })
+		keyboard.l().onPressDo({ pachamama.llover() })	
+	
 	}
+	
 	
 	method configPersonajes_Y_Terreno(){
 		game.title("La huerta de Toni")
