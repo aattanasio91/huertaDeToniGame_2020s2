@@ -37,7 +37,7 @@ object juego {
 		game.addVisualIn(pachamama, game.at(0, 13));
 		game.addVisual(supermercado)
 		game.addVisual(mercadito)
-}
+	}
 }
 
 

@@ -20,15 +20,27 @@ object toni {
 	}
 	
 	method moverAbajo(){
-		self.position(self.position().down(1))
+		if(self.position().y() != 0){
+			self.position(self.position().down(1))
+		}else{
+			self.position(new Position(x=self.position().x(), y=game.height() - 1))
+		}
 	}
 	
 	method moverIzq(){
-		self.position(self.position().left(1))
+		if(self.position().x() != 0){
+			self.position(self.position().left(1))
+		}else{
+			self.position(new Position(x=game.width() - 1, y=self.position().y()))
+		}
 	}
 	
 	method moverDer(){
-		self.position(self.position().right(1))
+		if(self.position().x() != game.width() - 1){
+			self.position(self.position().right(1))
+		}else{
+			self.position(new Position(x=0, y=self.position().y()))
+		}		
 	}
 	
 	method sembrar(unaPlanta){
@@ -63,16 +75,20 @@ object toni {
 	}
 	
 	method cosechar(){
-		const planta = game.uniqueCollider(self)
-		if(planta.estaListaParaCosechar()){
-			plantasCosechadas.add(planta)
-			game.removeVisual(planta)
-			plantasSembradas.remove(planta)
-			posicionesDePlantas.remove(self.position())
-		}
-		else{
-			self.error("La planta no se encuentra sembrada")
-		}
+		if(game.colliders(self) != []){
+			const planta = game.uniqueCollider(self)
+			if(game.colliders(self) == planta and planta.estaListaParaCosechar()){
+				plantasCosechadas.add(planta)
+				game.removeVisual(planta)
+				plantasSembradas.remove(planta)
+				posicionesDePlantas.remove(self.position())
+			}
+			else{
+				self.error("No se encuentra planta para cosechar")
+			}
+		}else{
+			self.error("No hay ninguna planta")
+		}		
 	}
 	
 	method venderPlanta(unaPlanta){
