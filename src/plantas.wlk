@@ -7,6 +7,8 @@ import configuraciones.*
 class Planta {
 	var property position
 	
+	const property tipo = "Planta"
+	
 	method regar()
 	
 	method estaListaParaCosechar()
@@ -15,7 +17,7 @@ class Planta {
 	
 	method valor() = 0
 
-		method serOfrenda() {
+	method serOfrenda() {
 		game.removeVisual(self) 
 		toni.plantasSembradas().remove(self)
 	}
@@ -23,7 +25,6 @@ class Planta {
 
 class Maiz inherits Planta{
 	var property esAdulta = false
-//	var property image = "maiz_bebe.png"
 	
 	override method valor(){ 
 		if(pachamama.estaAgradecida()){
@@ -32,7 +33,6 @@ class Maiz inherits Planta{
 		else {return 150}	}
 	
 	override method regar(){
-//		self.image("maiz_adulto.png")
 		self.esAdulta(true)
 	}
 	
@@ -51,21 +51,28 @@ class Maiz inherits Planta{
 }
 
 class Trigo inherits Planta{
-//	const property nombreImagen = ["trigo_0.png", "trigo_1.png", "trigo_2.png", "trigo_3.png"]
 	var property estadoEvolucion = 0
-//	var property image = "trigo_0.png"
+	var property imagenes = ["trigo_0.png", "trigo_1.png", "trigo_2.png", "trigo_3.png"]
+	
 	method image() {
-	
-	if (estadoEvolucion == 0) { return "trigo_0.png" }
-	else if (estadoEvolucion == 1) { return "trigo_1.png"  }
-	else if (estadoEvolucion == 2) { return "trigo_2.png"  }
-	else { return "trigo_3.png"  }
-	
+		return imagenes.get(estadoEvolucion)
 	}
-	
+
+	method pachaAgradecida(){
+		var valor = 0
+		if(pachamama.estaAgradecida()){
+			valor = 1
+		}
+		return 0
+	}
+		
 	override method regar(){
-		if (pachamama.estaAgradecida()) { estadoEvolucion = (estadoEvolucion + 2).min(4) }
-		else { estadoEvolucion = (estadoEvolucion + 1).min(4) }
+		if(pachamama.estaAgradecida()){
+			self.estadoEvolucion((self.estadoEvolucion() + 2).min(3))
+		}
+		else{
+			self.estadoEvolucion((self.estadoEvolucion() + 1).min(3))
+		}
 	}
 	
 	override method estaListaParaCosechar(){
@@ -74,10 +81,10 @@ class Trigo inherits Planta{
 	
 	override method valor(){
 		var valor = 0
-		if(self.estadoEvolucion() % 4 == 2){
+		if(self.estadoEvolucion() == 2){
 			valor = 100
 		}
-		else if(self.estadoEvolucion() % 4 == 3){
+		else if(self.estadoEvolucion() == 3){
 			valor = 200
 		}
 		return valor
@@ -91,7 +98,7 @@ class Tomaco inherits Planta{
 	override method regar(){}
 	
 	override method estaListaParaCosechar(){
-		return true
+		return not pachamama.estaAgradecida() 
 	}
 	
 	override method valor(){
@@ -99,11 +106,15 @@ class Tomaco inherits Planta{
 	}
 	
 	override method aptoCeliaco() = true
-
-
 	
-	method image() { 
-		return if (pachamama.estaAgradecida()) { "tomaco_podrido.png" }
-		else { "tomaco_ok.png" }			
-	}
+	method image() {
+		var imagen = "" 
+		if (pachamama.estaAgradecida()) {
+			 imagen = "tomaco_podrido.png"
+		}
+		else {
+			imagen = "tomaco_ok.png"
+		}
+		return imagen
+	}	
 }

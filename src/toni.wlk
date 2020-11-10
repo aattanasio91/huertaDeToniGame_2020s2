@@ -10,6 +10,7 @@ object toni {
 	var property plantasCosechadas = []
 	var property posicionesDePlantas = [] 
 	var property oro = 0
+	const property tipo = "Persona"
 	
 	method moverArriba(){
 		if(self.position().y() != game.height() - 1){
@@ -77,19 +78,20 @@ object toni {
 	method cosechar(){
 		if(game.colliders(self) != []){
 			const planta = game.uniqueCollider(self)
-			if(game.colliders(self) == planta and planta.estaListaParaCosechar()){
+			if(planta.estaListaParaCosechar()){
 				plantasCosechadas.add(planta)
 				game.removeVisual(planta)
 				plantasSembradas.remove(planta)
 				posicionesDePlantas.remove(self.position())
 			}
 			else{
-				self.error("No se encuentra planta para cosechar")
+				self.error("No está lista para cosechar")
 			}
-		}else{
-			self.error("No hay ninguna planta")
-		}		
-	}
+		}
+		else{
+			self.error("No se encuentra planta para cosechar")
+		}
+	}		
 	
 	method venderPlanta(unaPlanta){
 		if(self.plantasCosechadas().contains(unaPlanta)){
@@ -104,11 +106,25 @@ object toni {
 		plantasCosechadas.clear()
 	}
 	
+	method estaEnMercado(){
+		var estaEnMercado = false
+		if(game.colliders(self) != [] and game.colliders(self).get(0).tipo() == "Mercado"){
+			estaEnMercado = true
+		}
+		return estaEnMercado
+	}
+
 	method venderEnMercado() {
-		if (self.valorCosechaActual() == 0) { self.error("Nada para Vender") }
-			else if(position == mercadito.position() ) { mercadito.aceptarCompra() }
-			else if (position == supermercado.position()) { supermercado.aceptarCompra() }
-			else { self.error("no hay ningun mercado") }
+		if(self.estaEnMercado()){
+			if(self.plantasCosechadas() != []){
+				game.uniqueCollider(self).aceptarCompra()
+				self.venderCosecha()
+			}else{
+				self.error("No tengo nada para vender")
+			}
+		}else{
+			self.error("No estoy en el mercado")
+		}
 	}
 	
 	method valorCosechaActual(){
@@ -127,12 +143,14 @@ object toni {
 		return self.plantasSembradas().any({planta => !planta.estaListaParaCosechar()})
 	}
 
-method hacerOfrenda(pachamama) { 
-		pachamama.rotarPosicion()
-		if (plantasSembradas != []) { plantasSembradas.anyOne().serOfrenda() }		
-		if (not pachamama.estaAgradecida()) { pachamama.nivelAgradecimiento(10) }	
-		else {pachamama.llover() self.regarLasPlantas()}					
+	method ofrenda(unaPlanta){
+		game.removeVisual(unaPlanta)
+		plantasSembradas.remove(unaPlanta)
+		self.posicionesDePlantas().remove(unaPlanta.position())	
 	}
-
+	
+	method hacerOfrenda() { 
+		self.ofrenda(plantasSembradas.anyOne())
+	}
 }
 

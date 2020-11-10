@@ -8,6 +8,7 @@ class Mercado {
 	var property position
 	var property reservaOro
 	const property mercaderiaComprada = []
+	const property tipo = "Mercado"
 		
 	method aceptarCompra(){ 
 		if(reservaOro >= toni.valorCosechaActual()) {

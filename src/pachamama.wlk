@@ -3,6 +3,7 @@ import wollok.game.*
 object pachamama {
 	var property nivelAgradecimiento = 10
 	var property position = game.at(0, 13)
+	const property tipo = "Pachamama"
 	
 	method image() {
 		return if (self.estaAgradecida()) { "pachamama-agradecida.png" }
@@ -13,9 +14,12 @@ object pachamama {
 	method fumigar() { nivelAgradecimiento = 0 }
 	method estaAgradecida() { return nivelAgradecimiento >= 10 }
 	
-	method rotarPosicion() { 
-		if (self.position() == game.at(0,13)) { self.position(game.at(13,0))}
-		else { self.position(game.at(0,13)) }
+	method recibirOfrenda() {
+		if(not self.estaAgradecida()){
+			self.nivelAgradecimiento(10)
+		}else{
+			self.llover()
+		}
 	}
 	
 }

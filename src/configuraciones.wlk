@@ -4,9 +4,6 @@ import plantas.*
 import mercado.*
 import pachamama.*
 
-const supermercado = new Mercado(reservaOro=2000,position=game.at(13,7),image="supermarket.jpg") 
-const mercadito = new Mercado(reservaOro=500,position=game.at(13,13),image="mercado1.jpg")
-
 object juego {
 	
 	method configTeclado(){
@@ -37,10 +34,32 @@ object juego {
 		game.width(15)
 		game.height(15)
 		game.ground("tierra.png")
+
+		const supermercado = new Mercado(reservaOro=2000,position=game.at(13,7),image="supermarket.jpg") 
+		const mercadito = new Mercado(reservaOro=500,position=game.at(13,13),image="mercado1.jpg")
+		
 		game.addVisual(toni)
-		game.addVisualIn(pachamama, game.at(0, 13));
+		game.addVisual(pachamama);
 		game.addVisual(supermercado)
 		game.addVisual(mercadito)
+		
+		
+		game.onCollideDo(pachamama, { t =>
+		if(toni.plantasSembradas()!= []){
+			toni.hacerOfrenda()
+			pachamama.recibirOfrenda()
+			toni.plantasSembradas().forEach({planta => planta.regar()})
+			self.rotar(pachamama)
+		}else{
+			pachamama.error("No tienes nada que ofrecer!!!")
+		}
+		})
+	}
+	
+	method rotar(personaje){
+		game.removeVisual(personaje)
+		personaje.position(new Position(x=personaje.position().x()+1, y=personaje.position().y()))
+		game.addVisualIn(personaje, game.at(personaje.position().x(), personaje.position().y()));
 	}
 }
 
